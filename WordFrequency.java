@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 class MyMapNode {
@@ -10,6 +12,39 @@ class MyMapNode {
         this.key = key;
         this.value = value;
         this.next = null;
+    }
+}
+
+// hash table using LL for each index
+class MyHashTable {
+
+    private List<KeyValueLinkedList> buckets;
+
+    // num - total number of buckets
+    public MyHashTable(int num) {
+        this.buckets = new ArrayList<>(num);
+
+        for (int i = 0; i < num; i++) {
+            buckets.add(new KeyValueLinkedList());
+        }
+    }
+
+    // add key value pair to hash table
+    public void put(String key) {
+        int index = getIndex(key);
+        buckets.get(index).add(key);
+    }
+
+    public void display() {
+        System.out.println("word frequencies: ");
+        for (KeyValueLinkedList list : buckets) {
+            list.display();
+        }
+    }
+
+    // get index for a key using hash code
+    private int getIndex(String key) {
+        return Math.abs(key.hashCode() % buckets.size());
     }
 }
 
@@ -47,7 +82,7 @@ class KeyValueLinkedList {
         MyMapNode cur = head;
 
         while (cur != null) {
-            System.err.println(cur.key + " : " + cur.value);
+            System.out.println(cur.key + " : " + cur.value);
             cur = cur.next;
         }
     }
@@ -60,23 +95,21 @@ public class WordFrequency {
         System.out.println("hello");
 
         // input
-        String input = "To be or not to be";
+        String input = "Paranoids are not paranoid because they are paranoid but because they keep putting themselves deliberately into paranoid avoidable situations.";
 
         // tokenize input
         StringTokenizer tokens = new StringTokenizer(input);
 
-        // creating a linkedlist of key value pair
-        KeyValueLinkedList wordFrequencyList = new KeyValueLinkedList();
+       
+        // create hashtable-uc2
+        MyHashTable wordFrequencyTable = new MyHashTable(10);
 
-        // counting frequency
         while (tokens.hasMoreTokens()) {
             String word = tokens.nextToken();
-            wordFrequencyList.add(word);
+            wordFrequencyTable.put(word);
         }
 
-        // display word frequencies
-        System.err.println("word Frequencies: ");
-        wordFrequencyList.display();
+        wordFrequencyTable.display();
 
     }
 
