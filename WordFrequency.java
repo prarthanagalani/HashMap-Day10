@@ -35,6 +35,12 @@ class MyHashTable {
         buckets.get(index).add(key);
     }
 
+    // remove key value pair from hash table
+    public void remove(String key) {
+        int index = getIndex(key);
+        buckets.get(index).remove(key);
+    }
+
     public void display() {
         System.out.println("word frequencies: ");
         for (KeyValueLinkedList list : buckets) {
@@ -78,6 +84,30 @@ class KeyValueLinkedList {
 
     }
 
+    // delete node
+    public void remove(String key) {
+        
+        MyMapNode cur = head;
+        MyMapNode prev = null;
+
+        while (cur != null) {
+            if (cur.key.equals(key)) {
+                if (prev != null) {
+                    prev.next = cur.next;
+                    prev = cur.next;
+                    return;
+                } else {
+                    head = cur.next;
+
+                }
+            }
+
+            prev = cur;
+            cur = cur.next;
+        }
+
+    }
+
     public void display() {
         MyMapNode cur = head;
 
@@ -100,7 +130,6 @@ public class WordFrequency {
         // tokenize input
         StringTokenizer tokens = new StringTokenizer(input);
 
-       
         // create hashtable-uc2
         MyHashTable wordFrequencyTable = new MyHashTable(10);
 
@@ -109,6 +138,12 @@ public class WordFrequency {
             wordFrequencyTable.put(word);
         }
 
+        wordFrequencyTable.display();
+
+        // Uc3 - remove "avoidable"
+        wordFrequencyTable.remove("avoidable");
+
+        System.out.println("Frequency after removal");
         wordFrequencyTable.display();
 
     }
